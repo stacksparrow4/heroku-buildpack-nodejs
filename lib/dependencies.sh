@@ -309,10 +309,13 @@ npm_prune_devdependencies() {
     # ---------------
     has_heroku_postprune_script=$(has_script "$build_dir/package.json" "heroku-postprune")
 
+    echo "Checking for postprune script"
     if [[ "$has_heroku_prebuild_script" == "true" ]]; then
+      echo "Running postprune"
       mcount "script.heroku-postprune"
       header "Postprune"
       run_if_present "$build_dir" 'heroku-postprune'
+      echo "Postprune complete!"
     fi
     # ---------------
 
