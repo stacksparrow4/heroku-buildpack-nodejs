@@ -304,6 +304,18 @@ npm_prune_devdependencies() {
   else
     cd "$build_dir" || return
     monitor "npm-prune" npm prune --userconfig "$build_dir/.npmrc" 2>&1
+
+    # Changes: run the heroku-postprune script
+    # ---------------
+    has_heroku_postprune_script=$(has_script "$build_dir/package.json" "heroku-postprune")
+
+    if [[ "$has_heroku_prebuild_script" == "true" ]]; then
+      mcount "script.heroku-postprune"
+      header "Postprune"
+      run_if_present "$build_dir" 'heroku-postprune'
+    fi
+    # ---------------
+
     meta_set "skipped-prune" "false"
   fi
 }
